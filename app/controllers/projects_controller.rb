@@ -34,10 +34,10 @@ class ProjectsController < ApplicationController
 
   # PATCH/PUT /projects/1 or /projects/1.json
   def update
-    if project.update(project_params)
-      render json: project
+    if @project.update(project_params)
+      render json: @project
     else
-      render json: project.errors, status: :unprocessable_entity
+      render json: @project.errors, status: :unprocessable_entity
     end
   end
 

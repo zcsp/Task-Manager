@@ -41,8 +41,8 @@ class TasksController < ApplicationController
     task = Task.find(params[:id])
     task.update(
       {
-        "start_date": Date.strptime(task_params[:start_date], '%m/%d/%Y'),
-        "end_date": Date.strptime(task_params[:end_date], '%m/%d/%Y')
+        "start_date": task_params[:start_date].nil? ? nil : Date.strptime(task_params[:start_date], '%m/%d/%Y'),
+        "end_date": task_params[:end_date].nil? ? nil : Date.strptime(task_params[:end_date], '%m/%d/%Y')
       }
     )
     render json: task

@@ -26,17 +26,14 @@ class TaskGroupsController < ApplicationController
 
   # POST /task_groups or /task_groups.json
   def create
-    @task_group = TaskGroup.new({ project_id: params[:project_id] })
-    @task_group.name = 'New Group'
-
-    respond_to do |format|
-      if @task_group.save
-        format.html { redirect_to project_url(params[:project_id]), notice: "Task group was successfully created." }
-        format.json { render :show, status: :created, location: @task_group }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @task_group.errors, status: :unprocessable_entity }
-      end
+    task_group = TaskGroup.new({ project_id: params[:project_id] })
+    task_group.name = 'New Task Group'
+    if task_group.save
+      project = Project.find(params[:project_id])
+      project = project.as_json(include: { :task_groups => { :include => :tasks }})
+      render json: project
+    else
+      render json: task_group.errors, status: :unprocessable_entity
     end
   end
 
@@ -65,6 +62,6 @@ class TaskGroupsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def task_group_params
-      params.require(:task_group).permit(:name, :project_id)
+      params.require(:task_group).permit(:name, :project_id, :color)
     end
 end
