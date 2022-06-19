@@ -39,12 +39,13 @@ class TasksController < ApplicationController
   # PATCH/PUT /tasks/1 or /tasks/1.json
   def update
     task = Task.find(params[:id])
-    task.update(
-      {
-        "start_date": task_params[:start_date].nil? ? nil : Date.strptime(task_params[:start_date], '%m/%d/%Y'),
-        "end_date": task_params[:end_date].nil? ? nil : Date.strptime(task_params[:end_date], '%m/%d/%Y')
-      }
-    )
+    if task_params[:start_date].present?
+      params[:task][:start_date] = task_params[:start_date].nil? ? nil : Date.strptime(task_params[:start_date], '%m/%d/%Y')
+    end
+    if task_params.key?(:end_date)
+      params[:task][:end_date] = task_params[:end_date].nil? ? nil : Date.strptime(task_params[:end_date], '%m/%d/%Y')
+    end
+    task.update(task_params)
     render json: task
   end
 

@@ -9,7 +9,7 @@ allowed_headers = %i(get post put patch delete options head)
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins "https://cryptic-chamber-66784.herokuapp.com"
+    origins "https://spark3-tm.herokuapp.com"
 
     resource "*",
       headers: :any,
