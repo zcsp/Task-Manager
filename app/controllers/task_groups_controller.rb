@@ -26,7 +26,7 @@ class TaskGroupsController < ApplicationController
 
   # POST /task_groups or /task_groups.json
   def create
-    task_group = TaskGroup.new({ project_id: params[:project_id] })
+    task_group = TaskGroup.new(task_group_params)
     task_group.name = 'New Task Group'
     if task_group.save
       project = Project.find(params[:project_id])
@@ -47,11 +47,6 @@ class TaskGroupsController < ApplicationController
   # DELETE /task_groups/1 or /task_groups/1.json
   def destroy
     @task_group.destroy
-
-    respond_to do |format|
-      format.html { redirect_to task_groups_url, notice: "Task group was successfully destroyed." }
-      format.json { head :no_content }
-    end
   end
 
   private

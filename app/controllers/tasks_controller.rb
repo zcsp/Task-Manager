@@ -1,6 +1,5 @@
 class TasksController < ApplicationController
-  before_action :set_task, only: %i[ show edit update destroy ]
-  before_action :set_form_vars, only: %i[ show edit update destroy ]
+  before_action :set_task, only: %i[ show edit update destroy get_updates ]
 
   # GET /tasks or /tasks.json
   def index
@@ -55,17 +54,15 @@ class TasksController < ApplicationController
     render json: @task
   end
 
+  # GET /tasks/1/updates or /tasks/1/updates.json
+  def get_updates
+    render json: @task.updates
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_task
       @task = Task.find(params[:id])
-    end
-
-    def set_form_vars
-      @users = User.all || []
-      @projects = Project.all || []
-      @task_groups = TaskGroup.all || []
-      @statuses = Status.all || []
     end
 
     # Only allow a list of trusted parameters through.
