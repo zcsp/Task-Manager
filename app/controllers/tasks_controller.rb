@@ -56,7 +56,7 @@ class TasksController < ApplicationController
 
   # GET /tasks/1/updates or /tasks/1/updates.json
   def get_updates
-    render json: @task.updates
+    render json: @task.updates.as_json(include: :user)
   end
 
   private

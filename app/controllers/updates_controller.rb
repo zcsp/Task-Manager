@@ -5,11 +5,12 @@ class UpdatesController < ApplicationController
   # GET /updates or /updates.json
   def index
     updates = Update.all
-    render json: updates
+    render json: updates.as_json(include: :user)
   end
 
   # GET /updates/1 or /updates/1.json
   def show
+    render json: @update.as_json(include: :user)
   end
 
   # GET /updates/new
@@ -39,7 +40,7 @@ class UpdatesController < ApplicationController
 
   # PATCH/PUT /updates/1 or /updates/1.json
   def update
-    @update = Update.find(params[:id])
+    @update = Update.includes(:user).find(params[:id])
     @update.update(update_params)
     render json: @update
   end
