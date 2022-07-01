@@ -5,12 +5,11 @@ class TasksController < ApplicationController
   def index
     if params[:date]
       tasks = Task.where('start_date <= ? AND end_date >= ?', params[:date].to_date, params[:date].to_date)
-                  .group(:task_group_id)
-                  .as_json(include: { :task_group => { :include => :project }})
     else
       tasks = Task.all
     end
-    render json: tasks
+    render json: tasks.group(:task_group_id, :id)
+                      .as_json(include: { :task_group => { :include => :project }})
   end
 
   # GET /tasks/1 or /tasks/1.json
