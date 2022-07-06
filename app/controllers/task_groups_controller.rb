@@ -28,8 +28,10 @@ class TaskGroupsController < ApplicationController
   def create
     task_group = TaskGroup.new(task_group_params)
     task_group.name = 'New Task Group'
+    project = Project.find(params[:project_id])
+    tg_count = project.task_groups.count()
+    task_group.order = tg_count
     if task_group.save
-      project = Project.find(params[:project_id])
       project = project.as_json(include: { :task_groups => { :include => :tasks }})
       render json: project
     else
