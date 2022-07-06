@@ -9,7 +9,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1 or /projects/1.json
   def show
-    project = @project.as_json(include: { :task_groups => { :include => :tasks }})
+    project = @project.as_json(include: { :task_groups => { :include => :tasks, :order => 'order ASC' }})
     render json: project
   end
 

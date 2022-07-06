@@ -1,4 +1,5 @@
 class TaskGroup < ApplicationRecord
+  default_scope { order(order: :asc) }
   belongs_to :project
   has_many :tasks
 

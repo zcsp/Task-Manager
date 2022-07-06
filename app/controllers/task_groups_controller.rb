@@ -44,6 +44,34 @@ class TaskGroupsController < ApplicationController
     render json: tg
   end
 
+  # PATCH/PUT /task_groups/1/order or /task_groups/1/order.json
+  def update_order
+    tg = TaskGroup.find(params[:id])
+    project_task_group_count = TaskGroup.where(project_id: tg.project_id).count()
+    new_order = [([params[:order], 0].max), project_task_group_count - 1].min
+    puts new_order
+    if tg.order.nil?
+      tg.order = new_order
+    else
+      if new_order < tg.order # order going down
+        tg_before = TaskGroup.find_by(project_id: tg.project_id, order: tg.order-1)
+        unless tg_before.nil?
+          tg_before.order += 1
+          tg_before.save
+        end
+      else # order going up
+        tg_after = TaskGroup.find_by(project_id: tg.project_id, order: tg.order+1)
+        unless tg_after.nil?
+          tg_after.order -= 1
+          tg_after.save
+        end
+      end
+      tg.order = new_order
+    end
+    tg.save
+    render json: tg
+  end
+
   # DELETE /task_groups/1 or /task_groups/1.json
   def destroy
     @task_group.destroy
@@ -57,6 +85,6 @@ class TaskGroupsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def task_group_params
-      params.require(:task_group).permit(:name, :project_id, :color)
+      params.require(:task_group).permit(:name, :project_id, :color, :order)
     end
 end

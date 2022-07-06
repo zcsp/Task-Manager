@@ -9,7 +9,7 @@ class TasksController < ApplicationController
       tasks = Task.all
     end
     render json: tasks.group(:task_group_id, :id)
-                      .as_json(include: { :task_group => { :include => :project }})
+                      .as_json(include: { :task_group => { :include => :project } })
   end
 
   # GET /tasks/1 or /tasks/1.json
@@ -36,7 +36,10 @@ class TasksController < ApplicationController
 
   # POST /tasks or /tasks.json
   def create
-    task = Task.create(task_params)
+    task = Task.new(task_params)
+    task.start_date = Date.today
+    task.end_date = Date.today
+    task.save
     render json: task
   end
 
